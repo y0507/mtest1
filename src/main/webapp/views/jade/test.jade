@@ -1,0 +1,22 @@
+//
+   Created by yl on 2016/3/23.
+doctype html
+html(lang="en")
+   head
+      meta(charset='UTF-8')
+      title 测试jade
+
+   body
+      h1 Jade-node 模板
+      #container.col
+         p.
+            Jade 模板
+            AngularJs 测试.
+            统一的ngApp 名字 angle
+      div(ng-app="myApp" ng-controller="testNameCtrl")
+         p 名字：
+         input(type="text",ng-model="name")
+         h1 Hello {{name}}
+
+      script(src='../../js/base.js')
+      script(src='../../js/app.js')

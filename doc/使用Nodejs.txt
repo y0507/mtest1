@@ -1,0 +1,31 @@
+使用Node.js的bower模块下载angularjs 和 jquery 
+
+首先安装bower模块
+C:\Users\yl>npm install -g bower
+
+环境变量里配好git路径 C:\Program Files\Git\bin;
+
+执行如下命令安装
+
+C:\Users\yl>bower install jquery
+bower jquery#*              not-cached git://github.com/jquery/jquery-dist.git#*
+bower jquery#*                 resolve git://github.com/jquery/jquery-dist.git#*
+bower jquery#*                download https://github.com/jquery/jquery-dist/archive/2.2.1.tar.gz
+bower jquery#*                progress received 0.3MB of 0.3MB downloaded, 94%
+bower jquery#*                 extract archive.tar.gz
+bower jquery#*                resolved git://github.com/jquery/jquery-dist.git#2.2.1
+bower jquery#^2.2.1            install jquery#2.2.1
+
+jquery#2.2.1 bower_components\jquery
+
+C:\Users\yl>bower install angularjs
+bower angularjs#*           not-cached git://github.com/angular/bower-angular.git#*
+bower angularjs#*              resolve git://github.com/angular/bower-angular.git#*
+bower angularjs#*             download https://github.com/angular/bower-angular/archive/v1.5.0.tar.gz
+bower angularjs#*              extract archive.tar.gz
+bower angularjs#*             resolved git://github.com/angular/bower-angular.git#1.5.0
+bower angular#^1.5.0           install angular#1.5.0
+
+angular#1.5.0 bower_components\angular
+
+C:\Users\yl>

@@ -1,0 +1,7 @@
+win10右键不能新建文件夹解决方法
+
+1.点击任务栏左下角的搜索，输入cmd。
+2.搜索结果中第一条是【命令提示符】（桌面应用），右键以管理员权限打开。
+3.粘贴下面的命令，然后回车即可。
+
+cmd /k reg add "HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers\New" /ve /t REG_SZ /d {D969A300-E7FF-11d0-A93B-00A0C90F2719} /f 

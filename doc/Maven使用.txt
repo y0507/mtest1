@@ -1,0 +1,22 @@
+﻿
+安装Maven，
+配置环境变量
+M2_HOME = D:\mianAnzhuang\apache-maven-3.3.9
+Path = %M2_HOME%\bin;
+
+
+
+
+
+Maven 错误（版本不兼容）
+-Dmaven.multiModuleProjectDirectory system property is not set. Check $M2_HOME environment variable and mvn script match.[ERROR] Maven execution terminated abnormally (exit code 1)
+解决方案（IDEA 14）
+File->setting->Build,Exe…->Build Tools->Maven->Runner
+设置VM Options:-Dmaven.multiModuleProjectDirectory=$M2_HOME，这样的话不用改变版本
+
+解决方案（Eclipse）
+Window->Preference->Java->Installed JREs->Edit
+设置Default VM arguments:-Dmaven.multiModuleProjectDirectory=$M2_HOME
+
+
+

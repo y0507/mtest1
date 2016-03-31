@@ -1,0 +1,47 @@
+MySQL免安装
+
+1）右键单击我的电脑->属性->高级系统设置(高级)->环境变量
+      点击系统变量下的新建按钮
+      输入变量名：MYSQL_HOME
+      输入变量值：D:\Program Files\mysql-5.6.11-winx64
+      #即为mysql的自定义解压目录。
+2）选择系统变量中的Path
+	  点击编辑按钮
+	  在变量值中添加变量值：%MYSQL_HOME%\bin
+	  注意是在原有变量值后面加上这个变量，用;隔开，不能删除原来的变量值，
+
+3）将mysql注册为windows系统服务
+
+    1）从控制台进入到MySQL解压目录下的 bin 目录下：
+    2）输入服务安装命令：
+	C:\Windows\system32>mysqld install MySQL --defaults-file="D:\mianAnzhuang\mysql-5.6.24-winx64\my.ini"
+	Service successfully installed.   #提示安装成功
+
+	#如果是以下错误，则使用管理员权限运行cmd在执行命令
+	Install/Remove of the Service Denied!
+	
+4）启动MySQL服务
+
+    方法一：
+        启动服务命令为：net start mysql
+    方法二：
+        打开管理工具 服务，找到MySQL服务。
+        通过右键选择启动或者直接点击左边的启动来启动服务。
+		
+5）修改 root 账号的密码
+
+    刚安装完成时root账号默认密码为空，此时可以将密码修改为指定的密码。如：123456
+    c:>mysql –uroot
+    mysql>show databases;
+    mysql>use mysql;
+    mysql>UPDATE user SET password=PASSWORD("123456") WHERE user='root';
+    mysql>FLUSH PRIVILEGES;
+    mysql>QUIT
+ 
+6） MySQL控制台快捷方式建立:
+    1）桌面右键->新建->快捷方式->对象位置输入：C:\Windows\System32\cmd.exe
+        快捷方式名称自己定义，确定，快捷方式建立成功
+    2）右键单击刚才建立的快捷方式->属性->把目标一栏修改成MySQL启动参数：
+        C:\Windows\System32\cmd.exe "D:\Program Files\MySQL\mysql-5.6.13-win32\bin" /k mysql -uroot -p inventory
+        解释:CMD路径 "MySQL路径bin目录" /k mysql -u用户名 -p密码 数据库名
+    3）修改完成后点击确定保存，直接双击快捷方式即可连接到MySQL数据库

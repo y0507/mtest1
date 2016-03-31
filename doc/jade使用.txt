@@ -1,0 +1,7 @@
+项目某个文件夹下 运行cmd
+
+安装把jade 编译成 html 的各种gulp模块
+
+#比如删除模块
+D:\workspaces\mtest1\src\main\webapp\nodejs>npm install del
+

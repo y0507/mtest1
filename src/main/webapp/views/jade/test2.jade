@@ -1,0 +1,21 @@
+//
+   Created by yl on 2016/3/23.
+doctype html
+html(lang='en')
+   head
+      meta(charset='UTF-8')
+      title 测试angularJs
+      link(rel='stylesheet',href="../../css/bootstrap.min.css")
+      script(src='../../js/base.js')
+      script(src='../../js/app.js')
+   body
+      div(ng-app='myApp',ng-controller='formCtrl')
+         form(name='myForm',role='form',novalidate='')
+            .form-group
+               label(for='firstName') 姓名
+               input#firstName.form-control(type='text',ng-model='user.firstName',placeholder='请输入用户名')
+            .form-group
+               label(for='add') 地址
+               input#add.form-control(type='text',ng-model='user.add',placeholder='请输入地址')
+            button.btn.btn-default(type='submit',ng-click='reset()') 清空
+         p form={{user}}

@@ -1,0 +1,198 @@
+﻿opensuse
+root:root
+linux:opensuse
+
+
+1 安装
+
+Root用户执行yast2->network services->network services 
+pure-ftp的状态置为on
+vsftpd的状态置为on
+
+
+2 启动
+
+大多数较新的系统采用的是xinetd超级服务守护进程。使用“vi /etc/xinetd.d/vsftpd” 看一下它的内容，如下： 
+
+disable = no  
+socket_type = stream
+wait = no
+
+如果“/etc/vsftpd.conf”中的有选项为“listen=YES”,注销它
+
+最后，重启xinetd，命令如下：
+> /etc/init.d/xinetd restart
+
+
+linux 测试自己的ftp   linux:opensuse
+>ftp localhost
+Name:linux
+Password:opensuse
+ftp>ls
+
+
+
+linux 测试自己的sftp   root:root
+>sftp localhost
+password:root
+sftp>ls
+
+
+本机测试通过后,其他机器不能连接该服务器
+原因：Suse的防火墙阻止了外来机器对FTP所用的端口的访问。
+解决方法：放开防火墙对FTP所使用的20和21端口的限制和ssh 的22 telnet 的 23，步骤如下：
+
+i> Yast→Security and Users→Firewall；
+
+ii> 在左侧的列表中选择Allowed Services，令人感到以外的是，即使安装FTP服务器，在Servces to Allow列表中也没有FTP服务可供选择，但是SSH、HTTP、HTTPS、Samba等都赫然在列，所以要使用高级设置。点击右下方法的Advanced按钮，打开高级设置对话框；
+
+iii> 在TCP Ports中输入20 21，注意两个端口号之间使用空格分开，OK；
+
+iv> Next→Accept
+
+重新启动，重新测试，连接成功
+vi> /etc/init.d/xinetd restart
+
+
+windows CMD 链接
+##################################################################
+C:\Users\yl>ftp
+ftp> open 192.168.122.129
+连接到 192.168.122.129。
+220-Welcome to Pure-FTPd.
+220-You are user number 2 of 50 allowed.
+220-Local time is now 18:54. Server port: 21.
+220-IPv6 connections are also welcome on this server.
+220 You will be disconnected after 15 minutes of inactivity.
+200 OK, UTF-8 enabled
+用户(192.168.122.129:(none)): linux
+331 User linux OK. Password required
+密码:opensuse
+230-User linux has group access to:  users      video
+230 OK. Current directory is /home/linux
+ftp>
+
+##################################################################
+
+C:\Users\yl>ftp 192.168.122.129
+连接到 192.168.122.129。
+220-Welcome to Pure-FTPd.
+220-You are user number 2 of 50 allowed.
+220-Local time is now 18:58. Server port: 21.
+220-IPv6 connections are also welcome on this server.
+220 You will be disconnected after 15 minutes of inactivity.
+200 OK, UTF-8 enabled
+用户(192.168.122.129:(none)): linux
+331 User linux OK. Password required
+密码:
+230-User linux has group access to:  users      video
+230 OK. Current directory is /home/linux
+ftp>
+
+ftp> bin
+200 TYPE is now 8-bit binary
+ftp> put C:\Users\yl\Desktop\id_dsa_1024.pub
+200 PORT command successful
+150 Connecting to port 52046
+226-File successfully transferred
+226 0.011 seconds (measured here), 50.05 Kbytes per second
+ftp: 发送 588 字节，用时 0.00秒 588000.00千字节/秒。
+ftp>
+
+
+
+#------------------------------------------------------------------------------------------------------#
+
+查看SSH服务
+>service sshd status
+Checking for service sshd          running
+
+#找到#PermitRootLogin no将其修改为PermitRootLogin yes
+>vi /etc/ssh/sshd_config
+
+#重启SSH
+>service sshd restart
+
+#xshell 使用root:root  输入密码登陆   linux:opensuse
+ssh://192.168.122.129:22
+
+
+
+#-----------opensuse开启telnet服务-------------------------------------------------------------------------------------------#
+
+1、在安装之前先检测一下系统里是不是有了telnet服务
+>rpm -q telnet-server
+telnet-server-1.2-77.i586 #说明已安装。
+如果没有安装，则会提示
+package telnet-server is not installed
+
+2.配置
+修改/etc/xinetd.d/telnet文件
+把
+disable         = yes
+改成
+disable         = no
+################################
+(1). 用vi命令编辑/etc/hosts.deny文件，放开telnet登录权限控制，
+ # vi /etc/hosts.deny：
+  在ALL: ALL 行前加“#”号注释，注销该行。
+(2). 用vi命令编辑/etc/hosts.allow文件，放开root用户登录权限控制：
+   添加一行ALL :    ALL
+(3). 用vi命令编辑/etc/xinetd.d/telnet文件，放开telnet：
+   用”#”注销disable=yes，或者修改为 disable=no
+(4). 命令编辑/etc/pam.d/login文件，放开root用户登录权限控制，
+  # vi /etc/pam.d/login：
+ 在auth required /lib/security/pam_securetty.so行前加“#”号注释，注销该行。
+(5). 启动xinetd服务，
+  #/etc/init.d/xinetd stop
+  #/etc/init.d/xinetd start
+
+################################
+
+3.重启xinetd
+>/etc/init.d/xinetd restart
+
+
+#win10 开启 Telnet服务  http://jingyan.todgo.com/shuma/2353410fts.html
+
+CMD
+C:\Users\yl>telnet 192.168.122.129
+localhost login: linux
+Password:opensuse
+
+
+
+#-----------xmanager配置-------------------------------------------------------------------------------------------#
+
+
+      1. /etc/X11/xdm/Xaccess 文件，去掉这行的注释。 
+         # * #any host can get a login windows
+         ――变成
+        * #any host can get a login windows
+      2. /etc/X11/xdm/xdm-config 文件，注释掉这一样。 
+        "Display Manager .Requestport 0" 
+      3./etc/opt/gnome/gdm/gdm.conf文件，[xdmcp]部分，把Enable 改为 true 去掉#Port=177的注释
+      4. /etc/opt/kde3/share/config/kdm/kdmrc文件，[Xdmcp]部分，把enable 改为 true 去掉#Port=177的注释
+      5.检查 /etc/inittab 修改运行级别为5 (X11) ，如果为3的话，你看到的将不是桌面，而是命令行窗口。
+        init 0(halt,不要将其设置为系统的initdefault)
+        init 1(single user mode,单使用者模式)
+        init 2(multiuser,without nfs,多用户模式,不带NFS)
+        init 3(Full multiuser mode,多用户模式,带NFS)
+        init 4(unused，保留)
+        init 5(X11，图形界面多用户模式)
+        init 6(reboot，不要将其设置为系统的initdefault)
+        id:5:initdefault: 
+      6. 关闭防火墙
+        修改防火墙配置文件/etc/sysconfig/ipchains可能是/etc/sysconfig/iptable，
+        在文件头部加入如下内容， 
+        # If you want to use GNOME/KDE, add the following line. 
+        -A input -p udp -s 0/0 -d 0/0 177 -j ACCEPT    
+      7. reboot 
+      连接：
+      Xmanager同网段打开Xmanager-broadcast，跨网段在Xbrowser 中输入IP 即可。
+      使用Exceed 同一网段XDMCP使用broadcast模式（可自动发现主机），跨网段使用query。
+      XManager登录SuSE的xWindow，root用户不能登录，其他用户都可以
+      1．/etc/sysconfig/displaymanager里有关root登录的项目需要设置---OK
+      将     DISPLAYMANAGER_ROOT_LOGIN_REMOTE="no"
+      改为 DISPLAYMANAGER_ROOT_LOGIN_REMOTE="yes"
+      2、新建文件/etc/rc.config，添加下面一行：ROOT_LOGIN_REMOTE="yes"

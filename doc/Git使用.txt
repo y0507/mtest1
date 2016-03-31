@@ -1,0 +1,29 @@
+﻿
+
+
+
+1、使用IntelliJ IDEA菜单建立本地Git仓库: VCS -> Import into Version Control -> Create Git Repository；
+2、在弹出的的窗口中选择当前项目；代码变成橙色
+3、项目上右键 -> Git -> Add ；   代码变成绿色
+4、目录\文件上右键 -> Git -> Commit Directory\File -> 弹出框添加描述信息 -> Commit 代码变成白色
+5、修改代码，代码变成蓝色，提交按步骤4
+
+
+
+项目目录 cmd
+
+#查看 分支  带*号为当前分支
+>git branch 
+* master
+  yyl_t1
+
+创建分支 yyl_t1
+>git branch yyl_t1
+
+切换到分支 yyl_t1
+>git checkout yyl_t1
+
+#查看 分支  带*号为当前分支
+>git branch 
+  master
+* yyl_t1

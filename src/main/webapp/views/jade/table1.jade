@@ -1,0 +1,54 @@
+//
+   Created by yl on 2016/3/24.
+
+doctype html
+html(lang="en",ng-app="myApp")
+   head
+      meta(charset="UTF-8")
+      title 表格
+      link(rel="stylesheet",href="../../css/bootstrap.min.css")
+      script(src="../../js/base.js")
+      script(src="../../js/app.js")
+   body(ng-controller="userTable1Controller")
+      .container
+         h3 用户列表
+         table.table.table-striped
+            thead
+               tr
+                  th 编辑
+                  th 名
+                  th 姓
+            tbody
+               tr(ng-repeat="user in users")
+                  td
+                     button.btn(ng-click="editUser(user.id)")
+                        span.glyphicon.glyphicon-pencil 编辑
+                  td {{user.fName}}
+                  td {{user.lName}}
+         hr
+         button.btn.btn-success(ng-click="editUser('new')")
+            span.glyphicon.glyphicon-pencil 创建新用户
+         hr
+         h3(ng-show="edit") 创建新用户：
+         h3(ng-hide="edit") 编辑用户：
+         form.form-horizontal
+            .form-group
+               label.col-sm-2.control-label 名：
+               .col-sm-10
+                  input(type="text",ng-model="fName", ng-disabled="!edit",placeholder="名")
+            .form-group
+               label.col-sm-2.control-label 姓：
+               .col-sm-10
+                  input(type="text",ng-model="lName", ng-disabled="!edit",placeholder="姓")
+            .form-group
+               label.col-sm-2.control-label 密码：
+               .col-sm-10
+                  input(type="password",ng-model="passw1", placeholder="密码")
+            .form-group
+               label.col-sm-2.control-label 重复密码：
+               .col-sm-10
+                  input(type="password",ng-model="passw2", placeholder="重复密码")
+         hr
+         button.btn.btn-success(ng-disabled="error||incomplete")
+            span.glyphicon.glyphicon-save
+            | ..保存修改
